@@ -99,3 +99,61 @@ r = pdk.Deck(layers=[polygon, geojson], initial_view_state=INITIAL_VIEW_STATE)
 
 # Afficher la carte dans Streamlit
 st.pydeck_chart(r)
+
+st.title("Analyse des trajets de taxi à New York")
+
+st.header("Données")
+
+path2 = "https://raw.githubusercontent.com/uber-web/kepler.gl-data/master/nyctrips/data.csv"
+df3 = pd.read_csv(path2, delimiter=',')
+
+st.write(df3.head())
+
+st.header("Informations générales sur le DataFrame")
+st.write(df3.info())
+
+st.header("Statistiques descriptives pour chaque colonne")
+st.write(df3.describe())
+
+st.header("Analyses")
+
+mean_trip_distance = df3['trip_distance'].mean()
+st.write(f"Distance moyenne parcourue par trajet : {mean_trip_distance:.2f} km")
+
+mean_tip_amount = df3['tip_amount'].mean()
+st.write(f"Montant moyen des pourboires : {mean_tip_amount:.2f} $")
+
+mean_passenger_count = df3['passenger_count'].mean()
+st.write(f"Moyenne du nombre de passagers par trajet : {mean_passenger_count:.2f}")
+
+mean_total_amount = df3['total_amount'].mean()
+st.write(f"Montant moyen total des trajets : {mean_total_amount:.2f} $")
+
+passenger_count_counts = df3['passenger_count'].value_counts()
+st.write("Nombre de trajets par nombre de passagers :")
+st.write(passenger_count_counts)
+
+st.header("Visualisations")
+
+st.subheader("Histogramme des distances de trajet")
+plt.figure()
+sns.histplot(df3['trip_distance'], bins=50)
+plt.title("Histogramme des distances de trajet")
+plt.xlabel("Distance (km)")
+plt.ylabel("Nombre de trajets")
+st.pyplot(plt)
+
+st.subheader("Boxplot des montants totaux des trajets")
+plt.figure()
+sns.boxplot(x=df3['total_amount'])
+plt.title("Boxplot des montants totaux des trajets")
+plt.xlabel("Montant total ($)")
+st.pyplot(plt)
+
+st.subheader("Nombre de trajets par nombre de passagers")
+plt.figure()
+sns.barplot(x=passenger_count_counts.index, y=passenger_count_counts.values)
+plt.title("Nombre de trajets par nombre de passagers")
+plt.xlabel("Nombre de passagers")
+plt.ylabel("Nombre de trajets")
+st.pyplot(plt)

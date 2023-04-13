@@ -235,3 +235,40 @@ st.title("Heatmap des points de prise en charge")
 
 # Affichez la heatmap dans l'application Streamlit
 st.pydeck_chart(create_heatmap(df3))
+
+# Create a scatterplot layer for pickup points
+scatterplot_layer = pdk.Layer(
+    "ScatterplotLayer",
+    data=df3,
+    get_position=["pickup_longitude", "pickup_latitude"],
+    get_radius=50,
+    get_fill_color=[255, 0, 0, 140],
+    pickable=True,
+    auto_highlight=True
+)
+
+# Create a scatterplot layer for dropoff points
+scatterplot_dropoff_layer = pdk.Layer(
+    "ScatterplotLayer",
+    data=df3,
+    get_position=["dropoff_longitude", "dropoff_latitude"],
+    get_radius=50,
+    get_fill_color=[0, 255, 0, 140],
+    pickable=True,
+    auto_highlight=True
+)
+
+# Create a deck containing both pickup and dropoff scatterplot layers
+deck_pickup_dropoff = pdk.Deck(
+    layers=[scatterplot_layer, scatterplot_dropoff_layer],
+    initial_view_state=pdk.ViewState(
+        latitude=df3["pickup_latitude"].mean(),
+        longitude=df3["pickup_longitude"].mean(),
+        zoom=10,
+        pitch=0,
+        bearing=0
+    )
+)
+
+# Render the PyDeck deck in Streamlit
+st.pydeck_chart(deck_pickup_dropoff)

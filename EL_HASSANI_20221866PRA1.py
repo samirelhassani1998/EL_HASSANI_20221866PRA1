@@ -349,3 +349,54 @@ plt.title('Heatmap de corrélation')
 # Render the matplotlib plot in Streamlit
 st.pyplot()
 
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+# Load data
+df3 = pd.read_csv("path/to/your/data.csv")
+
+# Convert datetime columns to datetime objects
+df3['tpep_pickup_datetime'] = pd.to_datetime(df3['tpep_pickup_datetime'])
+df3['tpep_dropoff_datetime'] = pd.to_datetime(df3['tpep_dropoff_datetime'])
+
+# Calculate trip duration and convert it to minutes
+df3['trip_duration'] = (df3['tpep_dropoff_datetime'] - df3['tpep_pickup_datetime']).dt.total_seconds() / 60
+
+# Extract features and target variable
+X = df3[['trip_distance', 'trip_duration']]
+y = df3['total_amount']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a linear regression model
+reg = LinearRegression()
+reg.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = reg.predict(X_test)
+
+# Calculate evaluation metrics
+r2 = r2_score(y_test, y_pred)
+rmse = mean_squared_error(y_test, y_pred, squared=False)
+mae = mean_absolute_error(y_test, y_pred)
+
+# Print evaluation metrics
+st.write(f'R² score: {r2:.2f}')
+st.write(f'RMSE: {rmse:.2f}')
+st.write(f'MAE: {mae:.2f}')
+
+# Visualize the predictions vs the actual values
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, alpha=0.5)
+plt.xlabel('Valeurs réelles ($)')
+plt.ylabel('Prédictions ($)')
+plt.title('Montant total : Prédictions vs Valeurs réelles')
+# Add a reference line
+max_value = np.maximum(y_test.max(), y_pred.max())
+plt.plot([0, max_value], [0, max_value], color='red', linestyle='--')
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()

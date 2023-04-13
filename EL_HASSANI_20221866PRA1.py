@@ -3,11 +3,16 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import gdown
 
 def main():
     st.title("Day of the Month Distribution - Uber - April 2014")
 
-    df = pd.read_csv('/home/samir/Downloads/uber-raw-data-apr14.csv', delimiter=',')
+    # Télécharger le fichier CSV à partir de Google Drive
+    url = "https://drive.google.com/uc?id=1qoK_zLLWWPjY3HaPN4WXH2q1OayJiQtz"
+    gdown.download(url, "uber-raw-data-apr14.csv", quiet=False)
+
+    df = pd.read_csv("uber-raw-data-apr14.csv", delimiter=',')
     df['Date/Time'] = pd.to_datetime(df['Date/Time'])
 
     def get_dom(dt):

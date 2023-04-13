@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import pydeck as pdk
 import gdown
-import os
 
 # Titre de l'application Streamlit
 st.title("Analyse des trajets de taxi à New York")

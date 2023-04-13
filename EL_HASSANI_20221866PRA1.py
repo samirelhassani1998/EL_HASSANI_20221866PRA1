@@ -56,3 +56,46 @@ ax.set_ylabel('Frequency')
 
 st.subheader("Histogramme de la distribution du jour du mois")
 st.pyplot(fig)
+
+import pydeck as pdk
+
+st.title("Carte GeoJSON avec PyDeck et Streamlit")
+
+# Définir l'URL de la source de données
+DATA_URL = "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json"
+
+# Définir les coordonnées du polygone de couverture de terrain
+LAND_COVER = [[[-123.0, 49.196], [-123.0, 49.324], [-123.306, 49.324], [-123.306, 49.196]]]
+
+# Définir l'état initial de la vue
+INITIAL_VIEW_STATE = pdk.ViewState(latitude=49.254, longitude=-123.13, zoom=11, max_zoom=16, pitch=45, bearing=0)
+
+# Créer une couche pour le polygone de couverture de terrain
+polygon = pdk.Layer(
+    "PolygonLayer",
+    LAND_COVER,
+    stroked=False,
+    # traite les données comme une paire de longitude-latitude plate
+    get_polygon="-",
+    get_fill_color=[0, 0, 0, 20],
+)
+
+# Créer une couche pour les données géospatiales
+geojson = pdk.Layer(
+    "GeoJsonLayer",
+    DATA_URL,
+    opacity=0.8,
+    stroked=False,
+    filled=True,
+    extruded=True,
+    wireframe=True,
+    get_elevation="properties.valuePerSqm / 20",
+    get_fill_color="[255, 255, properties.growth * 255]",
+    get_line_color=[255, 255, 255],
+)
+
+# Créer une carte contenant les deux couches
+r = pdk.Deck(layers=[polygon, geojson], initial_view_state=INITIAL_VIEW_STATE)
+
+# Afficher la carte dans Streamlit
+st.pydeck_chart(r)

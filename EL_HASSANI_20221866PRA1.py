@@ -157,3 +157,22 @@ plt.title("Nombre de trajets par nombre de passagers")
 plt.xlabel("Nombre de passagers")
 plt.ylabel("Nombre de trajets")
 st.pyplot(plt)
+
+# Fonction pour créer la heatmap
+def create_heatmap(df):
+    pickup_heatmap_data = df.groupby([
+        df['pickup_latitude'].round(2),
+        df['pickup_longitude'].round(2)
+    ]).size().unstack().fillna(0)
+
+    sns.heatmap(pickup_heatmap_data, cmap="viridis")
+    plt.title("Densité des points de prise en charge")
+    plt.xlabel("Longitude arrondie")
+    plt.ylabel("Latitude arrondie")
+    return plt
+
+# Titre de l'application Streamlit
+st.title("Heatmap de la densité des points de prise en charge")
+
+# Affichez la heatmap dans l'application Streamlit
+st.pyplot(create_heatmap(df3))

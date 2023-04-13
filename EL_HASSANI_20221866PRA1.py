@@ -272,3 +272,19 @@ deck_pickup_dropoff = pdk.Deck(
 
 # Render the PyDeck deck in Streamlit
 st.pydeck_chart(deck_pickup_dropoff)
+
+# Convert pickup datetime to pandas datetime format
+df3['tpep_pickup_datetime'] = pd.to_datetime(df3['tpep_pickup_datetime'])
+
+# Extract hour from pickup datetime
+df3['pickup_hour'] = df3['tpep_pickup_datetime'].dt.hour
+
+# Plot the number of trips per hour
+plt.figure(figsize=(12, 6))
+sns.countplot(data=df3, x='pickup_hour')
+plt.title("Nombre de trajets par heure")
+plt.xlabel("Heure")
+plt.ylabel("Nombre de trajets")
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()

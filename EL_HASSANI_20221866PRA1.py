@@ -189,3 +189,43 @@ plt.xlabel("Longitude arrondie")
 plt.ylabel("Latitude arrondie")
 st.pyplot(plt)
 plt.clf()
+
+# Exemple 1 : Répartition des trajets par jour de la semaine
+st.subheader("Répartition des trajets par jour de la semaine")
+day_of_week_counts = df3['pickup_day_of_week'].value_counts().sort_index()
+sns.barplot(x=day_of_week_counts.index, y=day_of_week_counts.values)
+plt.title("Répartition des trajets par jour de la semaine")
+plt.xlabel("Jour de la semaine")
+plt.ylabel("Nombre de trajets")
+plt.xticks(rotation=45)
+st.pyplot(plt)
+plt.clf()
+
+# Exemple 2 : Durée des trajets en fonction de la distance
+st.subheader("Durée des trajets en fonction de la distance")
+sns.scatterplot(x=df3['trip_distance'], y=df3['trip_duration'])
+plt.title("Durée des trajets en fonction de la distance")
+plt.xlabel("Distance (km)")
+plt.ylabel("Durée (min)")
+st.pyplot(plt)
+plt.clf()
+
+# Exemple 3 : Montant total en fonction de la distance
+st.subheader("Montant total en fonction de la distance")
+sns.scatterplot(x=df3['trip_distance'], y=df3['total_amount'])
+plt.title("Montant total en fonction de la distance")
+plt.xlabel("Distance (km)")
+plt.ylabel("Montant total ($)")
+st.pyplot(plt)
+plt.clf()
+
+# Exemple 4 : Répartition des types de paiement
+st.subheader("Répartition des types de paiement")
+payment_type_counts = df3['payment_type'].value_counts().sort_index()
+sns.barplot(x=payment_type_counts.index, y=payment_type_counts.values)
+plt.title("Répartition des types de paiement")
+plt.xlabel("Type de paiement")
+plt.ylabel("Nombre de trajets")
+plt.xticks(rotation=45)
+st.pyplot(plt)
+plt.clf()

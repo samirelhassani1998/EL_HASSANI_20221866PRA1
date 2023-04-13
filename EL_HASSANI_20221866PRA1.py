@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import gdown
 
+# Ajouter une barre latérale avec votre nom, email et lien LinkedIn
+st.sidebar.title("Samir EL HASSANI")
+st.sidebar.write("Email: samir.el-hassani@efrei.net")
+st.sidebar.write("LinkedIn: ")
+st.sidebar.markdown("[https://www.linkedin.com/in/elhassanisamir/](https://www.linkedin.com/in/elhassanisamir/)")
+
 st.title("Analyse des données Uber - Avril 2014")
 
 # Télécharger le fichier CSV à partir de Google Drive

@@ -176,3 +176,33 @@ st.title("Heatmap de la densité des points de prise en charge")
 
 # Affichez la heatmap dans l'application Streamlit
 st.pyplot(create_heatmap(df3))
+
+# Fonction pour créer le scatterplot
+def create_scatterplot(df):
+    INITIAL_VIEW_STATE = pdk.ViewState(
+        latitude=df['pickup_latitude'].mean(),
+        longitude=df['pickup_longitude'].mean(),
+        zoom=11,
+        max_zoom=16,
+        pitch=45,
+        bearing=0
+    )
+
+    scatterplot_layer = pdk.Layer(
+        "ScatterplotLayer",
+        data=df,
+        get_position=["pickup_longitude", "pickup_latitude"],
+        get_radius=50,
+        get_fill_color=[180, 0, 200, 140],
+        pickable=True,
+        auto_highlight=True
+    )
+
+    deck = pdk.Deck(layers=[scatterplot_layer], initial_view_state=INITIAL_VIEW_STATE)
+    return deck
+
+# Titre de l'application Streamlit
+st.title("Scatterplot des points de prise en charge")
+
+# Affichez le scatterplot dans l'application Streamlit
+st.pydeck_chart(create_scatterplot(df3))

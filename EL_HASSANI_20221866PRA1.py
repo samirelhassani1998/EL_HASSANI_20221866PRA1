@@ -400,3 +400,68 @@ plt.plot([0, max_value], [0, max_value], color='red', linestyle='--')
 
 # Render the matplotlib plot in Streamlit
 st.pyplot()
+
+# Convert datetime columns to datetime objects
+df3['tpep_pickup_datetime'] = pd.to_datetime(df3['tpep_pickup_datetime'])
+df3['tpep_dropoff_datetime'] = pd.to_datetime(df3['tpep_dropoff_datetime'])
+
+# Create new columns for the hour, day of the week, and month
+df3['pickup_hour'] = df3['tpep_pickup_datetime'].dt.hour
+df3['pickup_day'] = df3['tpep_pickup_datetime'].dt.dayofweek
+df3['pickup_month'] = df3['tpep_pickup_datetime'].dt.month
+
+# Plot boxplots of total_amount vs each time column
+time_columns = ['pickup_hour', 'pickup_day', 'pickup_month']
+for col in time_columns:
+    plt.figure()
+    sns.boxplot(x=col, y='total_amount', data=df3)
+    plt.title(f"Variations du total_amount en fonction de {col}")
+
+    # Render the matplotlib plot in Streamlit
+    st.pyplot()
+    
+# Plot a scatterplot of trip_distance vs total_amount
+plt.figure()
+sns.scatterplot(x='trip_distance', y='total_amount', data=df3)
+plt.title("Relation entre trip_distance et total_amount")
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()
+
+# Calculate the correlation matrix of selected columns
+corr_columns = ['trip_distance', 'passenger_count', 'fare_amount', 'tip_amount', 'total_amount']
+corr_matrix = df3[corr_columns].corr()
+
+# Display the correlation matrix
+st.write("Matrice de corrélation:\n", corr_matrix)
+
+
+# Plot a scatterplot of pickup_longitude vs pickup_latitude
+plt.figure(figsize=(10, 10))
+sns.scatterplot(data=df3, x='pickup_longitude', y='pickup_latitude', alpha=0.1)
+plt.title("Carte des points de départ des courses")
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()
+
+# Plot a scatterplot of dropoff_longitude vs dropoff_latitude
+plt.figure(figsize=(10, 10))
+sns.scatterplot(data=df3, x='dropoff_longitude', y='dropoff_latitude', alpha=0.1)
+plt.title("Carte des points d'arrivée des courses")
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()
+
+# Plot a scatterplot of trip_duration vs total_amount
+plt.figure()
+sns.scatterplot(data=df3, x='trip_duration', y='total_amount')
+plt.title("Relation entre la durée des courses et le montant total payé")
+plt.xlabel("Durée (minutes)")
+plt.ylabel("Montant total")
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()

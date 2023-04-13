@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import gdown
-
 def main():
     st.title("Day of the Month Distribution - Uber - April 2014")
 

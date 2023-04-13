@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import gdown
-
 st.title("Analyse des données Uber - Avril 2014")
 
 # Télécharger le fichier CSV à partir de Google Drive

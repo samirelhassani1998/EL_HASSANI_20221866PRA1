@@ -10,6 +10,7 @@ st.sidebar.title("Samir EL HASSANI")
 st.sidebar.write("Email: samir.el-hassani@efrei.net")
 st.sidebar.write("LinkedIn: ")
 st.sidebar.markdown("[https://www.linkedin.com/in/elhassanisamir/](https://www.linkedin.com/in/elhassanisamir/)")
+st.sidebar.write("GitHub: https://github.com/samirelhassani1998")
 
 st.title("Analyse des données Uber - Avril 2014")
 

@@ -288,3 +288,64 @@ plt.ylabel("Nombre de trajets")
 
 # Render the matplotlib plot in Streamlit
 st.pyplot()
+
+# Group data by hour and calculate total revenue
+hourly_revenue = df3.groupby('pickup_hour')['total_amount'].sum().reset_index()
+
+# Plot total revenue per hour
+plt.figure(figsize=(12, 6))
+sns.barplot(data=hourly_revenue, x='pickup_hour', y='total_amount')
+plt.title("Revenus totaux par heure")
+plt.xlabel("Heure")
+plt.ylabel("Revenus totaux")
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()
+
+# Create a heatmap layer for dropoff points
+heatmap_dropoff = pdk.Layer(
+    "HeatmapLayer",
+    data=df3,
+    opacity=0.8,
+    get_position=["dropoff_longitude", "dropoff_latitude"],
+    aggregation='"SUM"',
+    get_weight="passenger_count"
+)
+
+# Create a deck containing the heatmap layer
+r = pdk.Deck(
+    layers=[heatmap_dropoff],
+    initial_view_state=pdk.ViewState(
+        latitude=df3["dropoff_latitude"].mean(),
+        longitude=df3["dropoff_longitude"].mean(),
+        zoom=10,
+        pitch=0,
+        bearing=0
+    )
+)
+
+# Render the PyDeck deck in Streamlit
+st.pydeck_chart(r)
+
+# Calculate the correlation matrix
+corr_matrix = df3[['trip_distance', 'fare_amount', 'tip_amount', 'total_amount']].corr()
+
+# Create a heatmap of the correlation matrix
+plt.figure(figsize=(10, 6))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
+plt.title('Heatmap de corrélation des caractéristiques numériques')
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()
+
+# Calculate the correlation matrix for all numerical columns
+correlation_matrix = df3.corr()
+
+# Create a heatmap of the correlation matrix
+plt.figure(figsize=(12, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.title('Heatmap de corrélation')
+
+# Render the matplotlib plot in Streamlit
+st.pyplot()
+

@@ -3,3 +3,4 @@ numpy==1.21.2
 matplotlib==3.4.3
 seaborn==0.11.2
 gdown==3.14.0
+pydeck

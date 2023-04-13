@@ -465,3 +465,67 @@ plt.ylabel("Montant total")
 
 # Render the matplotlib plot in Streamlit
 st.pyplot()
+
+import streamlit as st
+import pydeck as pdk
+import pandas as pd
+import os
+
+st.title("Visualisation de points pour les prises en charge et les déposes")
+
+# Importer le dataset
+@st.cache
+def load_data():
+    df = pd.read_csv("https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2019-01.csv")
+    return df
+
+df = load_data()
+
+# Convertir les colonnes de dates en datetime
+df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
+df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
+
+# Créer une visualisation de points pour les prises en charge et les déposes
+os.environ["MAPBOX_API_KEY"] = "pk.eyJ1Ijoic2FtaWhzcyIsImEiOiJjbGdlN2ZrMmUwZ3N1M2ZtZnA2bTdtMXVsIn0.0vFWUtybsjQcElxgPoT-Mw"
+
+pickup_layer = pdk.Layer(
+    "ScatterplotLayer",
+    data=df,
+    get_position=["pickup_longitude", "pickup_latitude"],
+    get_radius=50,
+    get_fill_color=[255, 140, 0],
+    pickable=True,
+    opacity=0.8
+)
+
+dropoff_layer = pdk.Layer(
+    "ScatterplotLayer",
+    data=df,
+    get_position=["dropoff_longitude", "dropoff_latitude"],
+    get_radius=50,
+    get_fill_color=[0, 128, 255],
+    pickable=True,
+    opacity=0.8
+)
+
+# Configurer la vue
+view_state = pdk.ViewState(
+    longitude=-73.98,
+    latitude=40.75,
+    zoom=11,
+    min_zoom=5,
+    max_zoom=15,
+    pitch=40.5,
+    bearing=-27.36
+)
+
+# Créer le rendu de la carte
+r = pdk.Deck(
+    layers=[pickup_layer, dropoff_layer],
+    initial_view_state=view_state,
+    tooltip={"html": "<b>Color:</b> {color}", "style": {"color": "white"}},
+    map_style="mapbox://styles/mapbox/light-v9"
+)
+
+# Afficher la carte
+st.pydeck_chart(r)
